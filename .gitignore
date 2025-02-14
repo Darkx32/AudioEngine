@@ -1,0 +1,40 @@
+# Generic folders
+.vscode/*
+/AudioEngine.dir/*
+/CMakeFiles/*
+/Debug/*
+/output/*
+libs/openal-soft/Debug/*
+libs/openal-soft/CMakeFiles/*
+/x64/*
+
+# Generated files
+*.sln
+*.cmake.*
+*.cmake
+CMakeCache.txt
+*.vcxproj
+*.vcxproj.*
+*.dir
+*.dir.*
+MakeFile
+Makefile
+
+# Compiled openal-soft in Linux
+alconvolve
+aldebug
+aldirect
+alhrtf
+allafplay
+allatency
+almultireverb
+alplay
+alreverb
+alrecord
+alstream
+alstreamcb
+altonegen
+lib*.so
+lib*.so.*
+uhjdecoder
+uhjencoder

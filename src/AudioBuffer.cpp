@@ -10,7 +10,12 @@ namespace AudioEngine
     {
         FILE* fb;
 
+        #ifdef _WIN32
         fopen_s(&fb, file.c_str(), "rb");
+        #elif linux
+        fb = fopen64(file.c_str(), "rb");
+        #endif
+
 
         // Reading RIFF from WAVE file
         fread(&this->chunkID, sizeof(int), 1, fb);

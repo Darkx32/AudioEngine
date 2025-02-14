@@ -1,5 +1,12 @@
 #include "tools.h"
+
+#ifdef _WIN32
 #include <string>
+#endif
+
+#ifdef linux
+#include <cstring>
+#endif
 
 namespace AudioEngine
 {

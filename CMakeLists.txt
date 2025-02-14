@@ -4,6 +4,9 @@ project(AudioEngine VERSION 1.0.0)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output)
+
 add_subdirectory(libs/openal-soft)
 
 add_library(AudioEngine SHARED)

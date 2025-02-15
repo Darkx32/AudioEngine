@@ -32,7 +32,7 @@ namespace AudioEngine
         std::this_thread::sleep_for(std::chrono::nanoseconds(10000000));
         ALenum error, state;
         if ((error = alGetError()) != AL_NO_ERROR)
-            std::cout << error << std::endl;
+            std::cerr << error << std::endl;
 
         isPlayingAudio = false;
 

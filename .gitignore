@@ -2,6 +2,7 @@
 .vscode/*
 /AudioEngine.dir/*
 /CMakeFiles/*
+examples/CMakeFiles/*
 /Debug/*
 /output/*
 libs/openal-soft/Debug/*

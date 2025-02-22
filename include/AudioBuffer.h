@@ -11,35 +11,20 @@ namespace AudioEngine
 		AudioBuffer() = default;
 		AudioBuffer(std::string);
 
-		int getFormat();
 		short getNumChannels();
 		int getSampleRate();
 		short getBitsPerSample();
-		int getChunkSize();
-		std::vector<std::uint8_t> getData_8b();
-		std::vector<std::uint16_t> getData_16b();
+		std::vector<uint8_t> getBufferData();
 
 	private:
-		//RIFF
-		int chunkID;
-		int chunkSize;
-		int format;
-
-		// FMT
-		int subChunk1ID;
-		int subChunk1Size;
-		short audioFormat;
-		short numChannels;
+		int numChannels;
 		int sampleRate;
-		int byteRate;
-		short blockAlign;
 		short bitsPerSample;
+		int audioStreamIndex;
 
-		// DATA
-		int subChunk2ID;
-		int subChunk2Size;
+		std::vector<uint8_t> data;
 
-		std::vector<std::uint8_t> data_8b;
-		std::vector<std::uint16_t> data_16b;
+		void getDetailsFromAudio(void*, void*, void*);
+		void generateBufferData(void*, void*);
 	};
 }

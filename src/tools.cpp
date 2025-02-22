@@ -1,30 +1,62 @@
 #include "tools.h"
+#include <iostream>
+#include <AL/al.h>
 
-#ifdef _WIN32
-#include <string>
-#endif
-
-#ifdef linux
-#include <cstring>
-#endif
+int logLevel_g = 3;
 
 namespace AudioEngine
 {
-    char* getMessage(int code)
+    // Simple logger
+    #define RESET "\033[0m"
+    #define RED "\033[31m"
+    #define YELLOW "\033[33m"
+    #define CYAN "\033[36m"
+
+    void setLogLevel(int newLogLevel)
     {
-        char* msg = new char[sizeof(int)];
-
-        std::memcpy(msg, &code, sizeof(int));
-
-        return msg;
+        logLevel_g = newLogLevel;
     }
 
-    char *getMessage(short code)
+    int getLogLevel()
     {
-        char* msg = new char[sizeof(short)];
+        return logLevel_g;
+    }
 
-        std::memcpy(msg, &code, sizeof(short));
+    void logger(const char *msg, int logLevel)
+    {
+        if (logLevel_g < logLevel)
+            return;
 
-        return msg;
+        switch (logLevel)
+        {
+        case LOG_INFO: // Log color cyan
+            std::clog << CYAN << "[INFO] " << msg << RESET << std::endl;
+            break;
+
+        case LOG_WARN: // Log color yellow
+            std::clog << YELLOW << "[WARN] " << msg << RESET << std::endl;
+            break;
+
+        case LOG_ERROR: // Log color red
+            std::cerr << RED << "[ERROR] " << msg << RESET << std::endl;
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    /** Simple OpenAL Error translate */
+    const char* getErrorByOpenAL(int error)
+    {
+        switch (error)
+        {
+        case AL_INVALID_NAME:      return "OPENAL: Invalid name";
+        case AL_INVALID_ENUM:      return "OPENAL: Invalid enum";
+        case AL_INVALID_VALUE:     return "OPENAL: Invalid value";
+        case AL_INVALID_OPERATION: return "OPENAL: Invalid operation";
+        case AL_OUT_OF_MEMORY:     return "OPENAL: Out of memory";
+        default:                   return "OPENAL: Unknown";
+        }
     }
 }

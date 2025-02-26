@@ -6,7 +6,7 @@ int main(int argc, char** argv)
     
     if (argc < 2)
     {
-        std::cerr << "Any audio is requested" << std::endl;
+        AudioEngine::logger("Any audio is requested", AudioEngine::LOG_ERROR);
         return 1;
     }
     AudioEngine::AudioBuffer audioBuffer(argv[1]);

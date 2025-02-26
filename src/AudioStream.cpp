@@ -5,6 +5,10 @@
 
 namespace AudioEngine
 {
+    /**
+     * Create a new AudioStream
+     * @param audioBuffer Buffer for processing data
+     */
     AudioStream::AudioStream(AudioBuffer audioBuffer)
     {
         ALenum format, error;
@@ -28,16 +32,39 @@ namespace AudioEngine
         alDeleteSources(1, &this->stream);
     }
 
+    /**
+     * Get the stream
+     * @return Stream
+     */
     unsigned int* AudioStream::getStream()
     {
         return &this->stream;
     }
 
+    /**
+     * Set the volume of the stream
+     * @param newVolume New volume
+     */
     void AudioStream::setVolume(int newVolume)
     {
         alSourcef(this->stream, AL_GAIN, newVolume / 100.f);
     }
 
+    /**
+     * Set the position of the stream
+     * @param x X position
+     */
+    void AudioStream::setPosition(float x, float y, float z)
+    {
+        alSource3f(this->stream, AL_POSITION, x, y, z);
+    }
+
+    /**
+     * Generate the buffer data
+     * @param buffer OpenAL Buffer (is NULL)
+     * @param audioBuffer audioBuffer
+     * @param format audio format
+     */
     void AudioStream::genBufferData(unsigned int* buffer, AudioBuffer audioBuffer, int* format)
     {
         alGenBuffers(1, buffer);

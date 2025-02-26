@@ -12,6 +12,9 @@ extern "C"
 
 namespace AudioEngine
 {
+    /**
+     * Create a new AudioPlayer
+     */
     AudioPlayer::AudioPlayer()
     {
         av_log_set_level(AV_LOG_QUIET);
@@ -37,6 +40,10 @@ namespace AudioEngine
         this->streams.clear();
     }
 
+    /**
+     * Add a stream to the player
+     * @param audioStream Stream to be added
+     */
     void AudioPlayer::addStream(unsigned int* audioStream)
     {
         if (std::find(streams.begin(), streams.end(), audioStream) != streams.end())
@@ -45,6 +52,9 @@ namespace AudioEngine
             this->streams.push_back(audioStream);
     }
 
+    /**
+     * Update swaps of the player
+     */
     void AudioPlayer::updateSwaps()
     {
         ALenum error, state;
@@ -64,13 +74,45 @@ namespace AudioEngine
         }
     }
 
+    /**
+     * Check if audio is running
+     * @return True if audio is running
+     */
     bool AudioPlayer::isRunningAudio()
     {
         return this->isPlayingAudio;
     }
     
-    void AudioPlayer::playStream(unsigned int * source)
+    /**
+     * Play a stream
+     * @param audioStream Stream to be played
+     */
+    void AudioPlayer::playStream(unsigned int* source)
     {
         alSourcePlay(*source);
+    }
+
+    /**
+     * Pause a stream
+     * @param audioStream Stream to be paused
+     */
+    void AudioPlayer::pauseStream(unsigned int* audioStream)
+    {
+        if (std::find(streams.begin(), streams.end(), audioStream) != streams.end())
+            alSourcePause(*audioStream);
+        else
+            logger("Stream not added", LOG_ERROR);
+    }
+
+    /**
+     * Stop a stream
+     * @param audioStream Stream to be stopped
+     */
+    void AudioPlayer::stopStream(unsigned int* audioStream)
+    {
+        if (std::find(streams.begin(), streams.end(), audioStream) != streams.end())
+            alSourceStop(*audioStream);
+        else
+            logger("Stream not added", LOG_ERROR);
     }
 }

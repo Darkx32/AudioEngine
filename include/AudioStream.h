@@ -12,6 +12,7 @@ namespace AudioEngine
 
         unsigned int* getStream();
         void setVolume(int newVolume);
+        void setPosition(float x, float y, float z);
 
     private:
         void genBufferData(unsigned int*, AudioBuffer, int*);

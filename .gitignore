@@ -1,11 +1,9 @@
 # Generic folders
 .vscode/*
 /AudioEngine.dir/*
-CMakeFiles/*
+CMakeFiles
 /Debug/*
 /output/*
-libs/openal-soft/Debug/*
-libs/openal-soft/CMakeFiles/*
 /x64/*
 
 # Generated files

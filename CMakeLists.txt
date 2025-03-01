@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.31)
 
+if (LINUX)
+	set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
+endif()
 set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
 set(BUILD_EXAMPLES True CACHE STRING "For build examples.")
 

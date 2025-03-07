@@ -1,5 +1,5 @@
 #pragma once
-#include "AudioStream.h"
+#include "AudioStream.hpp"
 
 namespace AudioEngine
 {

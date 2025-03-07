@@ -6,7 +6,7 @@ endif()
 set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
 set(BUILD_EXAMPLES True CACHE STRING "For build examples.")
 
-project(AudioEngine VERSION 1.0.0)
+project(AudioEngine VERSION 1.0)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 

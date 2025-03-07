@@ -1,8 +1,8 @@
-#include "AudioPlayer.h"
+#include "AudioPlayer.hpp"
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <AL/alext.h>
-#include <tools.h>
+#include <tools.hpp>
 #include <algorithm>
 extern "C"
 {

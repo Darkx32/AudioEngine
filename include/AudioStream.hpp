@@ -1,5 +1,5 @@
 #pragma once
-#include "AudioBuffer.h"
+#include "AudioBuffer.hpp"
 
 namespace AudioEngine
 {

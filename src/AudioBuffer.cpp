@@ -1,5 +1,5 @@
-#include <AudioBuffer.h>
-#include "tools.h"
+#include <AudioBuffer.hpp>
+#include "tools.hpp"
 #include <AL/al.h>
 #include <string>
 extern "C"

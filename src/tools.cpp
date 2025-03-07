@@ -1,4 +1,4 @@
-#include "tools.h"
+#include "tools.hpp"
 #include <iostream>
 #include <AL/al.h>
 

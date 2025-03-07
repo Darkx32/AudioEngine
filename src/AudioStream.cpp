@@ -1,4 +1,4 @@
-#include "AudioStream.h"
+#include "AudioStream.hpp"
 #include <AL/al.h>
 #include <AL/alext.h>
 #include <iostream>

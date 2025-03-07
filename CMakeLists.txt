@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.20)
 
 if (LINUX)
 	set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")

@@ -4,7 +4,7 @@ if (LINUX)
 	set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
 endif()
 set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
-set(BUILD_EXAMPLES True CACHE STRING "For build examples.")
+option(AUDIOENGINE_EXAMPLES "Build examples" ON)
 
 project(AudioEngine VERSION 1.0)
 
@@ -27,6 +27,6 @@ target_link_directories(AudioEngine PRIVATE ${FFMPEG_INCLUDE_DIRS})
 target_link_directories(AudioEngine PRIVATE ${FFMPEG_LIBRARY_DIRS})
 target_link_libraries(AudioEngine PRIVATE ${FFMPEG_LIBRARIES})
 
-if(BUILD_EXAMPLES)
+if(AUDIOENGINE_EXAMPLES)
     add_subdirectory(examples)
 endif()

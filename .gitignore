@@ -8,7 +8,6 @@ CMakeFiles
 
 # Generated files
 *.sln
-*.cmake.*
 *.cmake
 CMakeCache.txt
 *.vcxproj

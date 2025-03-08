@@ -1,0 +1,13 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+# Encontrar dependências (se necessário)
+find_dependency(OpenAL CONFIG)
+find_dependency(FFMPEG)
+
+# Incluir os alvos da biblioteca
+include("${CMAKE_CURRENT_LIST_DIR}/AudioEngineTargets.cmake")
+
+set(AudioEngine_INCLUDE_DIRS "@CMAKE_INSTALL_INCLUDEDIR@")
+set(AudioEngine_LIBRARIES AudioEngine)

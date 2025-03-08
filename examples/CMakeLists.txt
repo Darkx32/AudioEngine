@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.11)
 
 project(basic_sample)
 add_executable(basic_sample basic_sample.cpp)

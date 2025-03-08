@@ -12,11 +12,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 
 option(AUDIOENGINE_EXAMPLES "Build examples" ON)
 
-include(GNUInstallDirs)
-
 project(AudioEngine VERSION 1.0)
 
 enable_language(CXX)
+
+include(GNUInstallDirs)
 
 find_package(OpenAL CONFIG REQUIRED)
 find_package(FFMPEG REQUIRED)

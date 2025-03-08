@@ -12,7 +12,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 
 option(AUDIOENGINE_EXAMPLES "Build examples" ON)
 
-project(AudioEngine VERSION 1.0)
+project(AudioEngine VERSION 1.1)
 
 enable_language(CXX)
 

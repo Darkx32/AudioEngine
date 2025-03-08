@@ -1,5 +1,5 @@
-#include <AudioBuffer.hpp>
-#include "tools.hpp"
+#include <AudioEngine/AudioBuffer.hpp>
+#include <AudioEngine/tools.hpp>
 #include <AL/al.h>
 #include <string>
 extern "C"
@@ -12,24 +12,30 @@ extern "C"
 
 namespace AudioEngine
 {
+    /**
+     * Create a Audio Buffer
+     * @param file path to audio file
+     */
     AudioBuffer::AudioBuffer(std::string file)
     {
         std::string msg = "Loading file " + file;
         logger(msg.c_str());
 
+        // Start format context
         AVFormatContext* formatContext = nullptr;
         if (avformat_open_input(&formatContext, file.c_str(), nullptr, nullptr))
         {
             logger("Error to open format context", LOG_ERROR);
-            exit(1);
+            return;
         }
         if (avformat_find_stream_info(formatContext, nullptr) > 0)
         {
             logger("File not contains nothing", LOG_ERROR);
             avformat_close_input(&formatContext);
-            exit(1);
+            return;
         }
 
+        // Get index of audio stream in codecpar
         this->audioStreamIndex = -1;
         for (int i = 0; i < formatContext->nb_streams; i++) {
             if (formatContext->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
@@ -40,24 +46,26 @@ namespace AudioEngine
         if (audioStreamIndex == -1) {
             logger("Error not found a audio in file", LOG_ERROR);
             avformat_close_input(&formatContext);
-            exit(1);
+            return;
         }
 
+        // Find decoder
         AVCodecParameters* codecParameters = formatContext->streams[audioStreamIndex]->codecpar;
         const AVCodec* codec = avcodec_find_decoder(codecParameters->codec_id);
         if (!codec)
         {
             logger("Not found any codec in audio file", LOG_ERROR);
             avformat_close_input(&formatContext);
-            exit(1);
+            return;
         }
 
+        // Alloc codec context
         AVCodecContext* codecContext = avcodec_alloc_context3(codec);
         if (!codecContext)
         {
             logger("Error to alloc codec context", LOG_ERROR);
             avformat_close_input(&formatContext);
-            exit(1);
+            return;
         }
 
         if (avcodec_parameters_to_context(codecContext, codecParameters) < 0)
@@ -65,15 +73,16 @@ namespace AudioEngine
             logger("Error when copying parameters to codec context", LOG_ERROR);
             avformat_close_input(&formatContext);
             avcodec_free_context(&codecContext);
-            exit(1);
+            return;
         }
 
+        // Open codec context
         if (avcodec_open2(codecContext, codec, nullptr) < 0)
         {
             logger("Error to open codec context", LOG_ERROR);
             avformat_close_input(&formatContext);
             avcodec_free_context(&codecContext);
-            exit(1);
+            return;
         }
 
         this->getDetailsFromAudio(formatContext, codecContext, codecParameters);
@@ -83,26 +92,48 @@ namespace AudioEngine
         avformat_close_input(&formatContext);
     }
 
+    /**
+     * Get number of channels
+     * @return Number of channels
+     */
     short AudioBuffer::getNumChannels()
     {
         return this->numChannels;
     }
 
+    /**
+     * Get sample rate from audio file
+     * @return Sample rate
+     */
     int AudioBuffer::getSampleRate()
     {
         return this->sampleRate;
     }
 
+    /**
+     * Get audio data in vector that contains bytes
+     * @return Vector with bytes
+     */
     std::vector<uint8_t> AudioBuffer::getBufferData()
     {
         return this->data;
     }
 
+    /**
+     * Get bits per sample from audio file
+     * @return Bits per sample
+     */
     short AudioBuffer::getBitsPerSample()
     {
         return this->bitsPerSample;
     }
 
+    /**
+     * Get audio file details and save it in variables on class
+     * @param fc AVFormatContext
+     * @param cc AVCodecContext
+     * @param cp AVCodecParameters
+     */
     void AudioBuffer::getDetailsFromAudio(void* fc, void* cc, void* cp)
     {
         AVFormatContext* formatContext = static_cast<AVFormatContext*>(fc);
@@ -116,7 +147,7 @@ namespace AudioEngine
             logger("Error to aloc frame", LOG_ERROR);
             avformat_close_input(&formatContext);
             avcodec_free_context(&codecContext);
-            exit(1);
+            return;
         }
 
         while (av_read_frame(formatContext, &packet) >= 0)
@@ -146,6 +177,11 @@ namespace AudioEngine
         av_frame_free(&frame);
     }
 
+    /**
+     * Generate audio buffer to play
+     * @param fc AVFormatContext
+     * @param cc AVCodecContext
+     */
     void AudioBuffer::generateBufferData(void* fc, void* cc)
     {
         AVFormatContext* formatContext = static_cast<AVFormatContext*>(fc);
@@ -163,7 +199,7 @@ namespace AudioEngine
         if (swr_init(swrContext) < 0)
         {
             logger("Error to init swrContext", LOG_ERROR);
-            exit(1);
+            return;
         }
         
         AVPacket pkt;

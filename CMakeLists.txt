@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.14)
 
 if (LINUX)
 	set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
@@ -17,9 +17,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 
 option(AUDIOENGINE_EXAMPLES "Build examples" ON)
 
-project(AudioEngine VERSION 1.1)
+project(AudioEngine 
+        VERSION 1.1
+        LANGUAGES CXX)
 
-enable_language(CXX)
+include(CMakePackageConfigHelpers)
 
 include(GNUInstallDirs)
 
@@ -53,8 +55,6 @@ install(
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.hpp"
 )
-
-include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/AudioEngineConfig.cmake.in"

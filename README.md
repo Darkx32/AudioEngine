@@ -24,7 +24,7 @@ cmake --build .
 
 ## Example code
 ```c++
-#include <AudioEngine.h> // Import AudioEngine library
+#include <AudioEngine/AudioEngine.h> // Import AudioEngine library
 
 int main(int argc, char** argv)
 {

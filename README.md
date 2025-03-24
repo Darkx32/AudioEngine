@@ -5,6 +5,12 @@ It is in its first version, it may present bugs or failures, but until then, I w
 * Easy to use.
 * Modern libraries and versions.
 
+## Install
+You can install using vcpkg
+```bash
+vcpkg install audioengine
+```
+
 ## How compile
 * Install and configure [vcpkg](https://github.com/microsoft/vcpkg), following instructions from repository.
 * Add the vcpkg root folder to the **VCPKG_ROOT** environment variable.

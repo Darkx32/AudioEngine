@@ -18,7 +18,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 option(AUDIOENGINE_EXAMPLES "Build examples" ON)
 
 project(AudioEngine 
-        VERSION 1.1
+        VERSION 1.2
         LANGUAGES CXX)
 
 include(CMakePackageConfigHelpers)

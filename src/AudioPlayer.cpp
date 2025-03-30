@@ -66,7 +66,7 @@ namespace AudioEngine
         for(unsigned int* stream : this->streams)
         {
             alGetSourcei(*stream, AL_SOURCE_STATE, &state);
-            if (state == AL_PLAYING || state == AL_INITIAL) 
+            if (state == AL_PLAYING) 
             {
                 this->isPlayingAudio = true;
                 break;

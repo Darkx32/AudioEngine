@@ -55,5 +55,6 @@ int main(int argc, char** argv)
 - [X] Audio control and management.
 - [X] Play any file song.
 - [X] Set volume and position.
+- [ ] Set general player volume.
+- [ ] More options for 2D/3D positions.
 - [ ] Filter and reverb audio streams
-- [ ] Use microphone

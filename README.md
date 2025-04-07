@@ -1,15 +1,16 @@
-# AudioEngine
+![image](https://github.com/user-attachments/assets/f71f1c39-ebfd-472b-bb4e-84f03959f530)# AudioEngine
 AudioEngine is a library made in C++, using **FFMPEG** and **OpenAL**. It consists of facilitating the handling of audio files for future applications.
 It is in its first version, it may present bugs or failures, but until then, I will try to adjust it every day.
 * Play any audio file (WAVE, OGG, MP3, ...).
 * Easy to use.
 * Modern libraries and versions.
 
-## Install
-You can install using vcpkg
+## How to install
+* You can install using vcpkg
 ```bash
 vcpkg install audioengine
 ```
+* Or using CMake
 
 ## How compile
 * Install and configure [vcpkg](https://github.com/microsoft/vcpkg), following instructions from repository.

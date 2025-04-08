@@ -15,6 +15,7 @@ namespace AudioEngine
         void playStream(unsigned int*);
         void pauseStream(unsigned int*);
         void stopStream(unsigned int*);
+        void setGeneralVolume(unsigned int);
 
     private:
         bool isPlayingAudio;

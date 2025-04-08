@@ -115,4 +115,16 @@ namespace AudioEngine
         else
             logger("Stream not added", LOG_ERROR);
     }
+
+    /**
+     * set volume of every streams in player
+     * @param volume Volume to be set 0%-100%
+     */
+    void AudioEngine::AudioPlayer::setGeneralVolume(unsigned int volume)
+    {
+        for(const unsigned int *stream : this->streams)
+        {
+            alSourcef(*stream, AL_GAIN, (float)volume / 100.0f);
+        }
+    }
 }

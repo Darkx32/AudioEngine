@@ -1,25 +1,28 @@
 #pragma once
-#include "AudioBuffer.hpp"
 
 namespace AudioEngine
 {
+    class AudioBuffer;
     class AudioStream
     {
     public:
         AudioStream() = default;
-        AudioStream(AudioBuffer);
+        AudioStream(const char* filepath);
         ~AudioStream();
 
         unsigned int* getStream();
-        void setVolume(int newVolume);
-        int getVolume();
-        void setPosition(float x, float y, float z);
-        float* getPosition();
+        AudioBuffer* getAudioBuffer();
+        void setVolume(int newVolume) const;
+        int getVolume() const;
+        void setPosition(float x, float y, float z) const;
+        float* getPosition() const;
 
     private:
-        void genBufferData(unsigned int*, AudioBuffer, int*);
-        void hasOpenALError(unsigned int*);
+        AudioBuffer* mAudioBuffer;
 
-        unsigned int stream;
+        void genBufferData(unsigned int* buffer, int* format);
+        void hasOpenALError(unsigned int* error);
+
+        unsigned int mStream;
     };
 }

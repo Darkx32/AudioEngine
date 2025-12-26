@@ -5,6 +5,7 @@ CMakeFiles
 /Debug/*
 /output/*
 /x64/*
+out/
 
 # Generated files
 *.sln
@@ -17,6 +18,7 @@ CMakeCache.txt
 *.stamp
 MakeFile
 Makefile
+.vs
 
 # Compiled openal-soft in Linux
 alconvolve

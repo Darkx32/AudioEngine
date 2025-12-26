@@ -16,7 +16,7 @@ namespace AudioEngine
      * Create a Audio Buffer
      * @param file path to audio file
      */
-    AudioBuffer::AudioBuffer(std::string file)
+    AudioBuffer::AudioBuffer(std::string file) : audioStreamIndex(0), bitsPerSample(0), numChannels(0), sampleRate(0)
     {
         std::string msg = "Loading file " + file;
         logger(msg.c_str());
@@ -37,7 +37,7 @@ namespace AudioEngine
 
         // Get index of audio stream in codecpar
         this->audioStreamIndex = -1;
-        for (int i = 0; i < formatContext->nb_streams; i++) {
+        for (unsigned int i = 0; i < formatContext->nb_streams; i++) {
             if (formatContext->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
                 audioStreamIndex = i;
             }
@@ -96,7 +96,7 @@ namespace AudioEngine
      * Get number of channels
      * @return Number of channels
      */
-    short AudioBuffer::getNumChannels()
+    short AudioBuffer::getNumChannels() const
     {
         return this->numChannels;
     }
@@ -105,7 +105,7 @@ namespace AudioEngine
      * Get sample rate from audio file
      * @return Sample rate
      */
-    int AudioBuffer::getSampleRate()
+    int AudioBuffer::getSampleRate() const
     {
         return this->sampleRate;
     }
@@ -123,7 +123,7 @@ namespace AudioEngine
      * Get bits per sample from audio file
      * @return Bits per sample
      */
-    short AudioBuffer::getBitsPerSample()
+    short AudioBuffer::getBitsPerSample() const
     {
         return this->bitsPerSample;
     }

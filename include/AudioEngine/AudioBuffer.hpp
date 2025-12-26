@@ -11,9 +11,9 @@ namespace AudioEngine
 		AudioBuffer() = default;
 		AudioBuffer(std::string);
 
-		short getNumChannels();
-		int getSampleRate();
-		short getBitsPerSample();
+		short getNumChannels() const;
+		int getSampleRate() const;
+		short getBitsPerSample() const;
 		std::vector<uint8_t> getBufferData();
 
 	private:
@@ -24,7 +24,7 @@ namespace AudioEngine
 
 		std::vector<uint8_t> data;
 
-		void getDetailsFromAudio(void*, void*, void*);
-		void generateBufferData(void*, void*);
+		void getDetailsFromAudio(void* fc, void* cc, void* cp);
+		void generateBufferData(void* fc, void* cc);
 	};
 }

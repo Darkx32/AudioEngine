@@ -3,6 +3,7 @@
 #include <AL/al.h>
 #include <AL/alext.h>
 #include <iostream>
+#include "AudioEngine/AudioBuffer.hpp"
 
 namespace AudioEngine
 {
@@ -10,9 +11,12 @@ namespace AudioEngine
      * Create a new AudioStream
      * @param audioBuffer Buffer for processing data
      */
-    AudioStream::AudioStream(AudioBuffer audioBuffer)
+    AudioStream::AudioStream(const char* filepath)
     {
-        if (audioBuffer.getBufferData().empty())
+        mStream = -1;
+        mAudioBuffer = new AudioBuffer(filepath);
+
+        if (mAudioBuffer->getBufferData().empty())
         {
             logger("AudioBuffer is empty", LOG_ERROR);
             return;
@@ -23,19 +27,20 @@ namespace AudioEngine
         ALuint buffer;
         unsigned int err = static_cast<unsigned int>(error);
         
-        genBufferData(&buffer, audioBuffer, &format);
-        this->hasOpenALError(&err);
+        genBufferData(&buffer, &format);
+        hasOpenALError(&err);
         
-        alGenSources(1, &this->stream);
-        this->hasOpenALError(&err);
+        alGenSources(1, &mStream);
+        hasOpenALError(&err);
 
-        alSourcei(this->stream, AL_BUFFER, (ALint)buffer);
-        this->hasOpenALError(&err);
+        alSourcei(mStream, AL_BUFFER, (ALint)buffer);
+        hasOpenALError(&err);
     }
 
     AudioStream::~AudioStream()
     {
-        alDeleteSources(1, &this->stream);
+        alDeleteSources(1, &mStream);
+        RELEASE(mAudioBuffer);
     }
 
     /**
@@ -44,26 +49,30 @@ namespace AudioEngine
      */
     unsigned int* AudioStream::getStream()
     {
-        return &this->stream;
+        return &mStream;
+    }
+
+    AudioBuffer* AudioStream::getAudioBuffer() {
+        return mAudioBuffer;
     }
 
     /**
      * Set the volume of the stream
      * @param newVolume New volume
      */
-    void AudioStream::setVolume(int newVolume)
+    void AudioStream::setVolume(int newVolume) const
     {
-        alSourcef(this->stream, AL_GAIN, newVolume / 100.f);
+        alSourcef(mStream, AL_GAIN, newVolume / 100.f);
     }
 
     /**
      * Get the volume from stream
      * @return Value of volume
      */
-    int AudioStream::getVolume()
+    int AudioStream::getVolume() const
     {
         float actualVolume = 0;
-        alGetSourcef(this->stream, AL_GAIN, &actualVolume);
+        alGetSourcef(mStream, AL_GAIN, &actualVolume);
         return static_cast<int>(actualVolume * 100.f);
     } 
 
@@ -71,19 +80,19 @@ namespace AudioEngine
      * Set the position of the stream
      * @param x X position
      */
-    void AudioStream::setPosition(float x, float y, float z)
+    void AudioStream::setPosition(float x, float y, float z) const
     {
-        alSource3f(this->stream, AL_POSITION, x, y, z);
+        alSource3f(mStream, AL_POSITION, x, y, z);
     }
 
     /**
      * Get the position from stream
      * @return Return array with the coords [x, y, z]
      */
-    float* AudioStream::getPosition()
+    float* AudioStream::getPosition() const
     {
         float x, y, z;
-        alGetSource3f(this->stream, AL_POSITION, &x, &y, &z);
+        alGetSource3f(mStream, AL_POSITION, &x, &y, &z);
         static float position[] = {x, y, z};
         return position;
     }
@@ -94,28 +103,28 @@ namespace AudioEngine
      * @param audioBuffer audioBuffer
      * @param format audio format
      */
-    void AudioStream::genBufferData(unsigned int* buffer, AudioBuffer audioBuffer, int* format)
+    void AudioStream::genBufferData(unsigned int* buffer, int* format)
     {
         ALuint error;
         alGenBuffers(1, buffer);
-        this->hasOpenALError(&error);
+        hasOpenALError(&error);
 
-        if (audioBuffer.getBitsPerSample() == 8)
+        if (mAudioBuffer->getBitsPerSample() == 8)
         {
-            if (audioBuffer.getNumChannels() == 1)
+            if (mAudioBuffer->getNumChannels() == 1)
                 *format = AL_FORMAT_MONO8;
-            else if (audioBuffer.getNumChannels() == 2)
+            else if (mAudioBuffer->getNumChannels() == 2)
                 *format = AL_FORMAT_STEREO8;
         } else
         {
-            if (audioBuffer.getNumChannels() == 1)
+            if (mAudioBuffer->getNumChannels() == 1)
                 *format = AL_FORMAT_MONO16;
-            else if (audioBuffer.getNumChannels() == 2)
+            else if (mAudioBuffer->getNumChannels() == 2)
                 *format = AL_FORMAT_STEREO16;
         }
         
 
-        alBufferData(*buffer, (ALenum)*format, audioBuffer.getBufferData().data(), audioBuffer.getBufferData().size(), audioBuffer.getSampleRate());
+        alBufferData(*buffer, (ALenum)*format, mAudioBuffer->getBufferData().data(), static_cast<ALsizei>(mAudioBuffer->getBufferData().size()), mAudioBuffer->getSampleRate());
         this->hasOpenALError(&error);
     }
 

@@ -41,18 +41,6 @@ namespace AudioEngine
     }
 
     /**
-     * Add a stream to the player
-     * @param audioStream Stream to be added
-     */
-    void AudioPlayer::addStream(unsigned int* audioStream)
-    {
-        if (std::find(streams.begin(), streams.end(), audioStream) != streams.end())
-            logger("Stream already added", LOG_WARN);
-        else
-            this->streams.push_back(audioStream);
-    }
-
-    /**
      * Update swaps of the player
      */
     void AudioPlayer::updateSwaps()
@@ -63,7 +51,7 @@ namespace AudioEngine
 
         isPlayingAudio = false;
 
-        for(unsigned int* stream : this->streams)
+        for(auto stream : this->streams)
         {
             alGetSourcei(*stream, AL_SOURCE_STATE, &state);
             if (state == AL_PLAYING) 
@@ -78,18 +66,23 @@ namespace AudioEngine
      * Check if audio is running
      * @return True if audio is running
      */
-    bool AudioPlayer::isRunningAudio()
+    bool AudioPlayer::isRunningAudio() const
     {
         return this->isPlayingAudio;
     }
     
     /**
-     * Play a stream
+     * Play a stream and save it to internal controller
      * @param audioStream Stream to be played
      */
-    void AudioPlayer::playStream(unsigned int* source)
+    void AudioPlayer::playStream(unsigned int* audioStream)
     {
-        alSourcePlay(*source);
+        if (std::find(streams.begin(), streams.end(), audioStream) != streams.end())
+            logger("Stream already added", LOG_WARN);
+        else {
+            this->streams.push_back(audioStream);
+            alSourcePlay(*audioStream);
+        }
     }
 
     /**

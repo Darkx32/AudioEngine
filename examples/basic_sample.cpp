@@ -9,11 +9,9 @@ int main(int argc, char** argv)
         AudioEngine::logger("Any audio is requested", AudioEngine::LOG_ERROR);
         return 1;
     }
-    AudioEngine::AudioBuffer audioBuffer(argv[1]);
     
-    AudioEngine::AudioStream audioStream(audioBuffer);
+    AudioEngine::AudioStream audioStream(argv[1]);
     
-    player.addStream(audioStream.getStream());
     player.playStream(audioStream.getStream());
     
     while(player.isRunningAudio())

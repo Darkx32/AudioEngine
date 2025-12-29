@@ -9,10 +9,10 @@ namespace AudioEngine
 	class AudioBuffer
 	{
 	public:
-		AudioBuffer(std::string file);
+		AudioBuffer(const std::string& file);
 		~AudioBuffer();
 
-		short getNumChannels() const;
+		int getNumChannels() const;
 		int getSampleRate() const;
 		short getBitsPerSample() const;
 

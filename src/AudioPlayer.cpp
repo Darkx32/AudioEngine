@@ -2,7 +2,6 @@
 #include <AudioEngine/tools.hpp>
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <AL/alext.h>
 #include <algorithm>
 extern "C"
 {
@@ -18,13 +17,13 @@ namespace AudioEngine
     AudioPlayer::AudioPlayer()
     {
         av_log_set_level(AV_LOG_QUIET);
-        ALCdevice* device = alcOpenDevice(NULL);
+        ALCdevice* device = alcOpenDevice(nullptr);
         if (!device)
         {
             logger("Error to open default device", LOG_ERROR);
             exit(1);
         }
-        ALCcontext* context = alcCreateContext(device, NULL);
+        ALCcontext* context = alcCreateContext(device, nullptr);
         if (!context)
         {
             logger("Error to create OpenAL Context", LOG_ERROR);
@@ -89,7 +88,7 @@ namespace AudioEngine
      * Pause a stream
      * @param audioStream Stream to be paused
      */
-    void AudioPlayer::pauseStream(unsigned int* audioStream)
+    void AudioPlayer::pauseStream(const unsigned int* audioStream)
     {
         if (std::find(streams.begin(), streams.end(), audioStream) != streams.end())
             alSourcePause(*audioStream);
@@ -101,7 +100,7 @@ namespace AudioEngine
      * Stop a stream
      * @param audioStream Stream to be stopped
      */
-    void AudioPlayer::stopStream(unsigned int* audioStream)
+    void AudioPlayer::stopStream(const unsigned int* audioStream)
     {
         if (std::find(streams.begin(), streams.end(), audioStream) != streams.end())
             alSourceStop(*audioStream);
@@ -113,7 +112,7 @@ namespace AudioEngine
      * set volume of every streams in player
      * @param volume Volume to be set 0%-100%
      */
-    void AudioEngine::AudioPlayer::setGeneralVolume(unsigned int volume)
+    void AudioPlayer::setGeneralVolume(const unsigned int volume) const
     {
         for(const unsigned int *stream : this->streams)
         {

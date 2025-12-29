@@ -2,7 +2,7 @@
 #include <iostream>
 #include <AL/al.h>
 
-int logLevel_g = 3;
+static int log_level_g = 3;
 
 namespace AudioEngine
 {
@@ -14,7 +14,7 @@ namespace AudioEngine
     void hasOpenALError(unsigned int* error) {
         if ((*error = alGetError()) != AL_NO_ERROR)
         {
-            const char* err = getErrorByOpenAL(*error);
+            const char* err = getErrorByOpenAL(static_cast<int>(*error));
             logger(err, LOG_ERROR);
             return;
         }
@@ -26,7 +26,7 @@ namespace AudioEngine
      */
     void setLogLevel(int newLogLevel)
     {
-        logLevel_g = newLogLevel;
+        log_level_g = newLogLevel;
     }
 
     /**
@@ -35,16 +35,17 @@ namespace AudioEngine
      */
     int getLogLevel()
     {
-        return logLevel_g;
+        return log_level_g;
     }
 
     /**
      * Log a message
      * @param msg Message to be logged
+     * @param logLevel Level for log
      */
-    void logger(const char *msg, int logLevel)
+    void logger(const char *msg, const int logLevel)
     {
-        if (logLevel_g < logLevel)
+        if (log_level_g < logLevel)
             return;
 
         switch (logLevel)
@@ -71,7 +72,7 @@ namespace AudioEngine
      * @param error Error code from OpenAL
      * @return decode error from code by OpenAL
      */
-    const char* getErrorByOpenAL(int error)
+    const char* getErrorByOpenAL(const int error)
     {
         switch (error)
         {

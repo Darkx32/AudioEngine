@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include "AudioStream.hpp"
 
 namespace AudioEngine
 {
@@ -13,9 +12,9 @@ namespace AudioEngine
         void updateSwaps();
         bool isRunningAudio() const;
         void playStream(unsigned int* audioStream);
-        void pauseStream(unsigned int* audioStream);
-        void stopStream(unsigned int* audioStream);
-        void setGeneralVolume(unsigned int volume);
+        void pauseStream(const unsigned int* audioStream);
+        void stopStream(const unsigned int* audioStream);
+        void setGeneralVolume(unsigned int volume) const;
 
     private:
         bool isPlayingAudio;

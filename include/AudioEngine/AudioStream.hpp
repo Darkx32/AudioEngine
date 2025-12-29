@@ -11,7 +11,7 @@ namespace AudioEngine
         ~AudioStream();
 
         unsigned int* getStream();
-        AudioBuffer* getAudioBuffer();
+        AudioBuffer* getAudioBuffer() const;
         void setVolume(int newVolume) const;
         int getVolume() const;
         void setPosition(float x, float y, float z) const;

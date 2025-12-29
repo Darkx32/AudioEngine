@@ -9,7 +9,7 @@ namespace AudioEngine
 {
     /**
      * Create a new AudioStream
-     * @param audioBuffer Buffer for processing data
+     * @param filepath Path to find audio file
      */
     AudioStream::AudioStream(const char* filepath)
     {
@@ -46,7 +46,8 @@ namespace AudioEngine
         return &mStream;
     }
 
-    AudioBuffer* AudioStream::getAudioBuffer() {
+    AudioBuffer* AudioStream::getAudioBuffer() const
+    {
         return mAudioBuffer;
     }
 
@@ -54,9 +55,9 @@ namespace AudioEngine
      * Set the volume of the stream
      * @param newVolume New volume
      */
-    void AudioStream::setVolume(int newVolume) const
+    void AudioStream::setVolume(const int newVolume) const
     {
-        alSourcef(mStream, AL_GAIN, newVolume / 100.f);
+        alSourcef(mStream, AL_GAIN, static_cast<ALfloat>(newVolume) / 100.f);
     }
 
     /**

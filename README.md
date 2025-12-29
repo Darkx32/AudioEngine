@@ -39,11 +39,9 @@ cmake --build .
 int main(int argc, char** argv)
 {
     AudioEngine::AudioPlayer player; // Create player sound
-    AudioEngine::AudioBuffer audioBuffer("<sound_file>"); // Create new audio buffer from file
-    AudioEngine::AudioStream audioStream(audioBuffer); // Create the stream from audio buffer
+    AudioEngine::AudioStream audioStream(audioBuffer); // Create the stream and buffer from audio file
     
-    player.addStream(audioStream.getStream()); // Add stream to play
-    player.playStream(audioStream.getStream()); // Play stream
+    player.playStream(audioStream.getStream()); // Add stream to manager and play stream
     
     while(player.isRunningAudio()) // Detect if any sound is playing
     {

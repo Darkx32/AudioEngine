@@ -16,7 +16,7 @@ namespace AudioEngine
      * Create a Audio Buffer
      * @param file path to audio file
      */
-    AudioBuffer::AudioBuffer(std::string file) : audioStreamIndex(0), bitsPerSample(0), numChannels(0), sampleRate(0)
+    AudioBuffer::AudioBuffer(std::string file) : mAudioStreamIndex(0), mBitsPerSample(0), mNumChannels(0), mSampleRate(0), mFormat(0), mBuffer(0)
     {
         std::string msg = "Loading file " + file;
         logger(msg.c_str());
@@ -36,21 +36,21 @@ namespace AudioEngine
         }
 
         // Get index of audio stream in codecpar
-        this->audioStreamIndex = -1;
+        mAudioStreamIndex = -1;
         for (unsigned int i = 0; i < formatContext->nb_streams; i++) {
             if (formatContext->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
-                audioStreamIndex = i;
+                mAudioStreamIndex = i;
             }
         }
     
-        if (audioStreamIndex == -1) {
+        if (mAudioStreamIndex == -1) {
             logger("Error not found a audio in file", LOG_ERROR);
             avformat_close_input(&formatContext);
             return;
         }
 
         // Find decoder
-        AVCodecParameters* codecParameters = formatContext->streams[audioStreamIndex]->codecpar;
+        AVCodecParameters* codecParameters = formatContext->streams[mAudioStreamIndex]->codecpar;
         const AVCodec* codec = avcodec_find_decoder(codecParameters->codec_id);
         if (!codec)
         {
@@ -90,6 +90,13 @@ namespace AudioEngine
 
         avcodec_free_context(&codecContext);
         avformat_close_input(&formatContext);
+
+        genBufferData();
+    }
+
+    AudioBuffer::~AudioBuffer() {
+        alDeleteBuffers(1, &mBuffer);
+        mData.clear();
     }
 
     /**
@@ -98,7 +105,7 @@ namespace AudioEngine
      */
     short AudioBuffer::getNumChannels() const
     {
-        return this->numChannels;
+        return this->mNumChannels;
     }
 
     /**
@@ -107,16 +114,7 @@ namespace AudioEngine
      */
     int AudioBuffer::getSampleRate() const
     {
-        return this->sampleRate;
-    }
-
-    /**
-     * Get audio data in vector that contains bytes
-     * @return Vector with bytes
-     */
-    std::vector<uint8_t> AudioBuffer::getBufferData()
-    {
-        return this->data;
+        return this->mSampleRate;
     }
 
     /**
@@ -125,7 +123,20 @@ namespace AudioEngine
      */
     short AudioBuffer::getBitsPerSample() const
     {
-        return this->bitsPerSample;
+        return this->mBitsPerSample;
+    }
+
+    /**
+     * Get audio data in vector that contains bytes
+     * @return Vector with bytes
+     */
+    std::vector<uint8_t> AudioBuffer::getBufferData()
+    {
+        return this->mData;
+    }
+
+    unsigned int& AudioBuffer::getBuffer() {
+        return mBuffer;
     }
 
     /**
@@ -152,13 +163,13 @@ namespace AudioEngine
 
         while (av_read_frame(formatContext, &packet) >= 0)
         {
-            if (packet.stream_index == audioStreamIndex)
+            if (packet.stream_index == mAudioStreamIndex)
             {
                 if (avcodec_send_packet(codecContext, &packet) == 0)
                 {
                     if (avcodec_receive_frame(codecContext, frame) == 0)
                     {
-                        this->bitsPerSample = av_get_bytes_per_sample(codecContext->sample_fmt) * 8;
+                        this->mBitsPerSample = av_get_bytes_per_sample(codecContext->sample_fmt) * 8;
                         break;
                     }
                 }
@@ -166,12 +177,12 @@ namespace AudioEngine
             av_packet_unref(&packet);
         }
 
-        this->numChannels = codecParameters->ch_layout.nb_channels;
-        this->sampleRate = codecParameters->sample_rate;
+        this->mNumChannels = codecParameters->ch_layout.nb_channels;
+        this->mSampleRate = codecParameters->sample_rate;
 
         logger("Audio is loaded");
-        std::string msg = "Number of channels: " + std::to_string(this->numChannels) + " Sample rate: " + 
-            std::to_string(this->sampleRate) + " Bits per sample: " + std::to_string(this->bitsPerSample);
+        std::string msg = "Number of channels: " + std::to_string(this->mNumChannels) + " Sample rate: " + 
+            std::to_string(this->mSampleRate) + " Bits per sample: " + std::to_string(this->mBitsPerSample);
         logger(msg.c_str());
 
         av_frame_free(&frame);
@@ -191,10 +202,10 @@ namespace AudioEngine
 
         SwrContext* swrContext = swr_alloc();
         av_opt_set_chlayout(swrContext, "in_chlayout", &formatContext->streams[0]->codecpar->ch_layout, 0);
-        av_opt_set_int(swrContext, "in_sample_rate", this->sampleRate, 0);
+        av_opt_set_int(swrContext, "in_sample_rate", this->mSampleRate, 0);
         av_opt_set_sample_fmt(swrContext, "in_sample_fmt", codecContext->sample_fmt, 0);
         av_opt_set_chlayout(swrContext, "out_chlayout", &formatContext->streams[0]->codecpar->ch_layout, 0);
-        av_opt_set_int(swrContext, "out_sample_rate", this->sampleRate, 0);
+        av_opt_set_int(swrContext, "out_sample_rate", this->mSampleRate, 0);
         av_opt_set_sample_fmt(swrContext, "out_sample_fmt", out_format, 0);
         if (swr_init(swrContext) < 0)
         {
@@ -206,19 +217,19 @@ namespace AudioEngine
         AVFrame* frame = av_frame_alloc();
         while (av_read_frame(formatContext, &pkt) >= 0)
         {
-            if (pkt.stream_index == audioStreamIndex)
+            if (pkt.stream_index == mAudioStreamIndex)
             {
                 if (avcodec_send_packet(codecContext, &pkt) == 0)
                 {
                     while (avcodec_receive_frame(codecContext, frame) == 0)
                     {   
                         uint8_t** output = nullptr;
-                        av_samples_alloc_array_and_samples(&output, nullptr, this->numChannels, frame->nb_samples, codecContext->sample_fmt, 0);
+                        av_samples_alloc_array_and_samples(&output, nullptr, this->mNumChannels, frame->nb_samples, codecContext->sample_fmt, 0);
                         swr_convert(swrContext, output, frame->nb_samples, (const uint8_t**)frame->data, frame->nb_samples);
 
-                        int new_data_size = av_samples_get_buffer_size(nullptr, this->numChannels, frame->nb_samples, out_format, 0);
+                        int new_data_size = av_samples_get_buffer_size(nullptr, this->mNumChannels, frame->nb_samples, out_format, 0);
 
-                        data.insert(data.end(), output[0], output[0] + new_data_size);
+                        mData.insert(mData.end(), output[0], output[0] + new_data_size);
 
                         av_freep(&output[0]);
                         av_freep(&output);
@@ -230,5 +241,37 @@ namespace AudioEngine
 
         av_frame_free(&frame);
         swr_free(&swrContext);
+    }
+
+    /**
+     * Generate the buffer data
+     * @param buffer OpenAL Buffer (is NULL)
+     * @param audioBuffer audioBuffer
+     * @param format audio format
+     */
+    void AudioBuffer::genBufferData()
+    {
+        ALuint error;
+        alGenBuffers(1, &mBuffer);
+        hasOpenALError(&error);
+
+        if (mBitsPerSample == 8)
+        {
+            if (mNumChannels == 1)
+                mFormat = AL_FORMAT_MONO8;
+            else if (mNumChannels == 2)
+                mFormat = AL_FORMAT_STEREO8;
+        }
+        else
+        {
+            if (mNumChannels == 1)
+                mFormat = AL_FORMAT_MONO16;
+            else if (mNumChannels == 2)
+                mFormat = AL_FORMAT_STEREO16;
+        }
+
+
+        alBufferData(mBuffer, (ALenum)mFormat, mData.data(), static_cast<ALsizei>(mData.size()), mSampleRate);
+        hasOpenALError(&error);
     }
 }

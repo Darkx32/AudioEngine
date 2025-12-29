@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.21)
 
 if (LINUX)
 	set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
@@ -28,8 +28,10 @@ include(GNUInstallDirs)
 find_package(OpenAL CONFIG REQUIRED)
 find_package(FFMPEG REQUIRED)
 
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS "src/*.cpp")
+
 add_library(AudioEngine SHARED)
-target_sources(AudioEngine PRIVATE src/AudioBuffer.cpp src/AudioStream.cpp src/AudioPlayer.cpp src/tools.cpp)
+target_sources(AudioEngine PRIVATE ${SRC_FILES})
 target_include_directories(AudioEngine
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

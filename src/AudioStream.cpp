@@ -21,20 +21,14 @@ namespace AudioEngine
             logger("AudioBuffer is empty", LOG_ERROR);
             return;
         }
-
-        ALenum format, error;
-        error = AL_NO_ERROR;
-        ALuint buffer;
-        unsigned int err = static_cast<unsigned int>(error);
         
-        genBufferData(&buffer, &format);
-        hasOpenALError(&err);
+        unsigned int error = AL_NO_ERROR;
         
         alGenSources(1, &mStream);
-        hasOpenALError(&err);
+        hasOpenALError(&error);
 
-        alSourcei(mStream, AL_BUFFER, (ALint)buffer);
-        hasOpenALError(&err);
+        alSourcei(mStream, AL_BUFFER, (ALint)mAudioBuffer->getBuffer());
+        hasOpenALError(&error);
     }
 
     AudioStream::~AudioStream()
@@ -95,46 +89,5 @@ namespace AudioEngine
         alGetSource3f(mStream, AL_POSITION, &x, &y, &z);
         static float position[] = {x, y, z};
         return position;
-    }
-
-    /**
-     * Generate the buffer data
-     * @param buffer OpenAL Buffer (is NULL)
-     * @param audioBuffer audioBuffer
-     * @param format audio format
-     */
-    void AudioStream::genBufferData(unsigned int* buffer, int* format)
-    {
-        ALuint error;
-        alGenBuffers(1, buffer);
-        hasOpenALError(&error);
-
-        if (mAudioBuffer->getBitsPerSample() == 8)
-        {
-            if (mAudioBuffer->getNumChannels() == 1)
-                *format = AL_FORMAT_MONO8;
-            else if (mAudioBuffer->getNumChannels() == 2)
-                *format = AL_FORMAT_STEREO8;
-        } else
-        {
-            if (mAudioBuffer->getNumChannels() == 1)
-                *format = AL_FORMAT_MONO16;
-            else if (mAudioBuffer->getNumChannels() == 2)
-                *format = AL_FORMAT_STEREO16;
-        }
-        
-
-        alBufferData(*buffer, (ALenum)*format, mAudioBuffer->getBufferData().data(), static_cast<ALsizei>(mAudioBuffer->getBufferData().size()), mAudioBuffer->getSampleRate());
-        this->hasOpenALError(&error);
-    }
-
-    void AudioStream::hasOpenALError(unsigned int *error)
-    {
-        if ((*error = alGetError()) != AL_NO_ERROR)
-        {
-            const char* err = getErrorByOpenAL(*error);
-            logger(err, LOG_ERROR);
-            return;
-        }
     }
 }

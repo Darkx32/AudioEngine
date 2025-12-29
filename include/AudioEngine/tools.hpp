@@ -14,6 +14,7 @@ namespace AudioEngine
         LOG_ERROR
     };
 
+    void hasOpenALError(unsigned int* error);
     void setLogLevel(int newLogLevel);
     int getLogLevel();
     void logger(const char* msg, int logLevel = LOG_INFO);

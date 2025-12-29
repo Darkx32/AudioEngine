@@ -5,25 +5,31 @@
 
 namespace AudioEngine
 {
+	class AudioStream;
 	class AudioBuffer
 	{
 	public:
-		AudioBuffer() = default;
-		AudioBuffer(std::string);
+		AudioBuffer(std::string file);
+		~AudioBuffer();
 
 		short getNumChannels() const;
 		int getSampleRate() const;
 		short getBitsPerSample() const;
-		std::vector<uint8_t> getBufferData();
 
 	private:
-		int numChannels;
-		int sampleRate;
-		short bitsPerSample;
-		int audioStreamIndex;
+		friend class AudioStream;
+		int mNumChannels;
+		int mSampleRate;
+		short mBitsPerSample;
+		int mAudioStreamIndex;
+		unsigned int mFormat;
+		unsigned int mBuffer;
 
-		std::vector<uint8_t> data;
-
+		std::vector<uint8_t> mData;
+		std::vector<uint8_t> getBufferData();
+		unsigned int& getBuffer();
+		
+		void genBufferData();
 		void getDetailsFromAudio(void* fc, void* cc, void* cp);
 		void generateBufferData(void* fc, void* cc);
 	};

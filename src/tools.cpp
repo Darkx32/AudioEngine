@@ -6,10 +6,19 @@ int logLevel_g = 3;
 
 namespace AudioEngine
 {
-    #define RESET "\033[0m"
-    #define RED "\033[31m"
-    #define YELLOW "\033[33m"
-    #define CYAN "\033[36m"
+    constexpr auto RESET = "\033[0m";
+    constexpr auto RED = "\033[31m";
+    constexpr auto YELLOW = "\033[33m";
+    constexpr auto CYAN = "\033[36m";
+
+    void hasOpenALError(unsigned int* error) {
+        if ((*error = alGetError()) != AL_NO_ERROR)
+        {
+            const char* err = getErrorByOpenAL(*error);
+            logger(err, LOG_ERROR);
+            return;
+        }
+    }
 
     /**
      * Set the log level

@@ -20,9 +20,6 @@ namespace AudioEngine
     private:
         AudioBuffer* mAudioBuffer;
 
-        void genBufferData(unsigned int* buffer, int* format);
-        void hasOpenALError(unsigned int* error);
-
         unsigned int mStream;
     };
 }

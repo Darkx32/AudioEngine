@@ -9,6 +9,8 @@ namespace AudioEngine
 {
 	AudioEffects::AudioEffects()
 	{
+		mAudioReverb = AudioReverb::Default();
+
 		alGenEffects(1, &mEffectBuffer);
 		alEffecti(mEffectBuffer, AL_EFFECT_TYPE, AL_EFFECT_EAXREVERB);
 		unsigned int err;

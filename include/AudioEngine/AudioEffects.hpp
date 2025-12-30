@@ -4,37 +4,44 @@ namespace AudioEngine
 {
 	struct AudioReverb
 	{
-        float density = 1.0f;
-        float diffusion = 1.0f;
+        float density;
+        float diffusion;
 
-        float gain = 0.32f;
-        float gainHF = 0.89f;
-        float gainLF = 1.0f;
+        float gain;
+        float gainHF;
+        float gainLF;
 
-        float decayTime = 1.49f;
-        float decayHFRatio = 0.83f;
-        float decayLFRatio = 1.0f;
+        float decayTime;
+        float decayHFRatio;
+        float decayLFRatio;
 
-        float reflectionsGain = 0.05f;
-        float reflectionsDelay = 0.007f;
-        float reflectionsPan[3] = { 0.0f, 0.0f, 0.0f };
+        float reflectionsGain;
+        float reflectionsDelay;
+        float reflectionsPan[3];
 
-        float lateReverbGain = 1.26f;
-        float lateReverbDelay = 0.011f;
-        float lateReverbPan[3] = { 0.0f, 0.0f, 0.0f };
+        float lateReverbGain;
+        float lateReverbDelay;
+        float lateReverbPan[3];
 
-        float echoTime = 0.25f;
-        float echoDepth = 0.0f;
+        float echoTime;
+        float echoDepth;
 
-        float modulationTime = 0.25f;
-        float modulationDepth = 0.0f;
+        float modulationTime;
+        float modulationDepth;
 
-        float airAbsorptionGainHF = 0.994f;
-        float HFReference = 5000.0f;
-        float LFReference = 250.0f;
+        float airAbsorptionGainHF;
+        float HFReference;
+        float LFReference;
 
         float roomRolloffFactor = 0.0f;
         int   decayHFLimit = 1;
+
+        static AudioReverb Default();
+        static AudioReverb UnderWater();
+        static AudioReverb SmallRoom();
+        static AudioReverb LargeHall();
+        static AudioReverb Cave();
+        static AudioReverb Bathroom();
 	};
 
     class AudioStream;

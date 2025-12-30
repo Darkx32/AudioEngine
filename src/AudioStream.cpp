@@ -89,8 +89,10 @@ namespace AudioEngine
     /**
      * Set the position of the stream
      * @param x X position
+     * @param y Y position
+     * @param z Z position
      */
-    void AudioStream::setPosition(float x, float y, float z) const
+    void AudioStream::setPosition(const float x, const float y, const float z) const
     {
         alSource3f(mStream, AL_POSITION, x, y, z);
     }
@@ -105,5 +107,10 @@ namespace AudioEngine
         alGetSource3f(mStream, AL_POSITION, &x, &y, &z);
         static float position[] = {x, y, z};
         return position;
+    }
+
+    AudioEffects* AudioStream::getEffects() const
+    {
+        return mAudioEffects;
     }
 }

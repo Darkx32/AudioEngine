@@ -18,6 +18,8 @@ namespace AudioEngine
         void setPosition(float x, float y, float z) const;
         float* getPosition() const;
 
+        AudioEffects* getEffects() const;
+
     private:
         AudioBuffer* mAudioBuffer = nullptr;
         AudioEffects* mAudioEffects = nullptr;

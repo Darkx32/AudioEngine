@@ -9,3 +9,8 @@ project(loop_audio)
 add_executable(loop_audio loop_audio.cpp)
 
 target_link_libraries(loop_audio PRIVATE AudioEngine)
+
+project(audio_effects)
+add_executable(audio_effects audio_effects.cpp)
+
+target_link_libraries(audio_effects PRIVATE AudioEngine)

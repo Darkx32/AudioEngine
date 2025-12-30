@@ -18,7 +18,7 @@ namespace AudioEngine
      */
     AudioBuffer::AudioBuffer(const std::string& file) : mNumChannels(0), mSampleRate(0), mBitsPerSample(0), mAudioStreamIndex(0), mFormat(0), mBuffer(0)
     {
-        std::string msg = "Loading file " + file;
+        const std::string msg = "Loading file " + file;
         logger(msg.c_str());
 
         // Start format context
@@ -95,7 +95,8 @@ namespace AudioEngine
     }
 
     AudioBuffer::~AudioBuffer() {
-        alDeleteBuffers(1, &mBuffer);
+        if (alIsBuffer(mBuffer))
+			alDeleteBuffers(1, &mBuffer);
         mData.clear();
     }
 

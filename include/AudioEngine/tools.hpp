@@ -2,7 +2,7 @@
 
 namespace AudioEngine
 {
-    static void RELEASE(void* pointer) {
+    static void RELEASE(const void* pointer) {
         if (pointer)
             delete pointer;
     }

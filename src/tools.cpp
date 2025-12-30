@@ -16,7 +16,6 @@ namespace AudioEngine
         {
             const char* err = getErrorByOpenAL(static_cast<int>(*error));
             logger(err, LOG_ERROR);
-            return;
         }
     }
 
@@ -24,7 +23,7 @@ namespace AudioEngine
      * Set the log level
      * @param newLogLevel New log level
      */
-    void setLogLevel(int newLogLevel)
+    void setLogLevel(const int newLogLevel)
     {
         log_level_g = newLogLevel;
     }
@@ -51,15 +50,15 @@ namespace AudioEngine
         switch (logLevel)
         {
         case LOG_INFO: // Log color cyan for simple LOG
-            std::clog << CYAN << "[INFO] " << msg << RESET << std::endl;
+            std::clog << CYAN << "[INFO] " << msg << RESET << "\n";
             break;
 
         case LOG_WARN: // Log color yellow for warning LOG
-            std::clog << YELLOW << "[WARN] " << msg << RESET << std::endl;
+            std::clog << YELLOW << "[WARN] " << msg << RESET << "\n";
             break;
 
         case LOG_ERROR: // Log color red for error LOG
-            std::cerr << RED << "[ERROR] " << msg << RESET << std::endl;
+            std::cerr << RED << "[ERROR] " << msg << RESET << "\n";
             break;
 
         default:

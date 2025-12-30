@@ -3,6 +3,7 @@
 namespace AudioEngine
 {
     class AudioBuffer;
+    class AudioEffects;
     class AudioStream
     {
     public:
@@ -18,7 +19,9 @@ namespace AudioEngine
         float* getPosition() const;
 
     private:
-        AudioBuffer* mAudioBuffer;
+        AudioBuffer* mAudioBuffer = nullptr;
+        AudioEffects* mAudioEffects = nullptr;
+        unsigned int mEffectSlot;
 
         unsigned int mStream;
     };

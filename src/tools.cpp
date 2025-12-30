@@ -1,5 +1,8 @@
 #include "AudioEngine/tools.hpp"
 #include <iostream>
+#include <cstdio>
+#include <cstdarg>
+#include <string>
 #include <AL/al.h>
 
 static int log_level_g = 3;
@@ -15,7 +18,7 @@ namespace AudioEngine
         if ((*error = alGetError()) != AL_NO_ERROR)
         {
             const char* err = getErrorByOpenAL(static_cast<int>(*error));
-            logger(err, LOG_ERROR);
+            logger(LOG_ERROR, err);
         }
     }
 
@@ -39,31 +42,40 @@ namespace AudioEngine
 
     /**
      * Log a message
-     * @param msg Message to be logged
      * @param logLevel Level for log
+     * @param msg Message to be logged
+     * @param ... Parameters
      */
-    void logger(const char *msg, const int logLevel)
+    void logger(const int logLevel, const char* msg, ...)
     {
+        va_list args;
+        va_start(args, msg);
+
+        char buffer[1024];
+        int _ = vsnprintf_s(buffer, sizeof(buffer), msg, args);
+
         if (log_level_g < logLevel)
             return;
 
         switch (logLevel)
         {
         case LOG_INFO: // Log color cyan for simple LOG
-            std::clog << CYAN << "[INFO] " << msg << RESET << "\n";
+            std::clog << CYAN << "[INFO] " << buffer << RESET << "\n";
             break;
 
         case LOG_WARN: // Log color yellow for warning LOG
-            std::clog << YELLOW << "[WARN] " << msg << RESET << "\n";
+            std::clog << YELLOW << "[WARN] " << buffer << RESET << "\n";
             break;
 
         case LOG_ERROR: // Log color red for error LOG
-            std::cerr << RED << "[ERROR] " << msg << RESET << "\n";
+            std::cerr << RED << "[ERROR] " << buffer << RESET << "\n";
             break;
 
         default:
             break;
         }
+
+        va_end(args);
     }
 
     /**

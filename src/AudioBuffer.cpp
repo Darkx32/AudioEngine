@@ -19,18 +19,18 @@ namespace AudioEngine
     AudioBuffer::AudioBuffer(const std::string& file) : mNumChannels(0), mSampleRate(0), mBitsPerSample(0), mAudioStreamIndex(0), mFormat(0), mBuffer(0)
     {
         const std::string msg = "Loading file " + file;
-        logger(msg.c_str());
+        logger(LOG_INFO, msg.c_str());
 
         // Start format context
         AVFormatContext* formatContext = nullptr;
         if (avformat_open_input(&formatContext, file.c_str(), nullptr, nullptr))
         {
-            logger("Error to open format context", LOG_ERROR);
+            logger(LOG_ERROR, "Error to open format context");
             return;
         }
         if (avformat_find_stream_info(formatContext, nullptr) > 0)
         {
-            logger("File not contains nothing", LOG_ERROR);
+            logger(LOG_ERROR, "File not contains nothing");
             avformat_close_input(&formatContext);
             return;
         }
@@ -44,7 +44,7 @@ namespace AudioEngine
         }
     
         if (mAudioStreamIndex == -1) {
-            logger("Error not found a audio in file", LOG_ERROR);
+            logger(LOG_ERROR, "Error not found a audio in file");
             avformat_close_input(&formatContext);
             return;
         }
@@ -54,7 +54,7 @@ namespace AudioEngine
         const AVCodec* codec = avcodec_find_decoder(codecParameters->codec_id);
         if (!codec)
         {
-            logger("Not found any codec in audio file", LOG_ERROR);
+            logger(LOG_ERROR, "Not found any codec in audio file");
             avformat_close_input(&formatContext);
             return;
         }
@@ -63,14 +63,14 @@ namespace AudioEngine
         AVCodecContext* codecContext = avcodec_alloc_context3(codec);
         if (!codecContext)
         {
-            logger("Error to alloc codec context", LOG_ERROR);
+            logger(LOG_ERROR, "Error to alloc codec context");
             avformat_close_input(&formatContext);
             return;
         }
 
         if (avcodec_parameters_to_context(codecContext, codecParameters) < 0)
         {
-            logger("Error when copying parameters to codec context", LOG_ERROR);
+            logger(LOG_ERROR, "Error when copying parameters to codec context");
             avformat_close_input(&formatContext);
             avcodec_free_context(&codecContext);
             return;
@@ -79,7 +79,7 @@ namespace AudioEngine
         // Open codec context
         if (avcodec_open2(codecContext, codec, nullptr) < 0)
         {
-            logger("Error to open codec context", LOG_ERROR);
+            logger(LOG_ERROR, "Error to open codec context");
             avformat_close_input(&formatContext);
             avcodec_free_context(&codecContext);
             return;
@@ -150,13 +150,13 @@ namespace AudioEngine
     {
         AVFormatContext* formatContext = static_cast<AVFormatContext*>(fc);
         AVCodecContext* codecContext = static_cast<AVCodecContext*>(cc);
-        AVCodecParameters* codecParameters = static_cast<AVCodecParameters*>(cp);
+        const AVCodecParameters* codecParameters = static_cast<AVCodecParameters*>(cp);
 
         AVPacket packet;
         AVFrame* frame = av_frame_alloc();
         if (!frame)
         {
-            logger("Error to aloc frame", LOG_ERROR);
+            logger(LOG_ERROR, "Error to aloc frame");
             avformat_close_input(&formatContext);
             avcodec_free_context(&codecContext);
             return;
@@ -181,10 +181,8 @@ namespace AudioEngine
         this->mNumChannels = codecParameters->ch_layout.nb_channels;
         this->mSampleRate = codecParameters->sample_rate;
 
-        logger("Audio is loaded");
-        std::string msg = "Number of channels: " + std::to_string(this->mNumChannels) + " Sample rate: " + 
-            std::to_string(this->mSampleRate) + " Bits per sample: " + std::to_string(this->mBitsPerSample);
-        logger(msg.c_str());
+        logger(LOG_INFO, "Audio is loaded");
+        logger(LOG_INFO, "Number of channels: %d Sample rate: %d Bits per sample %hd", mNumChannels, mSampleRate, mBitsPerSample);
 
         av_frame_free(&frame);
     }
@@ -210,7 +208,7 @@ namespace AudioEngine
         av_opt_set_sample_fmt(swrContext, "out_sample_fmt", out_format, 0);
         if (swr_init(swrContext) < 0)
         {
-            logger("Error to init swrContext", LOG_ERROR);
+            logger(LOG_ERROR, "Error to init swrContext");
             return;
         }
         

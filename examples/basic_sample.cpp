@@ -6,7 +6,7 @@ int main(int argc, char** argv)
     
     if (argc < 2)
     {
-        AudioEngine::logger("Any audio is requested", AudioEngine::LOG_ERROR);
+        AudioEngine::logger(AudioEngine::LOG_ERROR, "Any audio is requested");
         return 1;
     }
     

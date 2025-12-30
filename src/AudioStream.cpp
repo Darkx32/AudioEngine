@@ -22,7 +22,7 @@ namespace AudioEngine
 
         if (mAudioBuffer->getBufferData().empty())
         {
-            logger("AudioBuffer is empty", LOG_ERROR);
+            logger(LOG_ERROR, "AudioBuffer is empty");
             return;
         }
         

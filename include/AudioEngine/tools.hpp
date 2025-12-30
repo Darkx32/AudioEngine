@@ -17,7 +17,7 @@ namespace AudioEngine
     void hasOpenALError(unsigned int* error);
     void setLogLevel(int newLogLevel);
     int getLogLevel();
-    void logger(const char* msg, int logLevel = LOG_INFO);
+    void logger(int logLevel, const char* msg, ...);
 
     const char* getErrorByOpenAL(int error);
 }

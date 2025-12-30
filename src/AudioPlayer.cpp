@@ -20,13 +20,13 @@ namespace AudioEngine
         ALCdevice* device = alcOpenDevice(nullptr);
         if (!device)
         {
-            logger("Error to open default device", LOG_ERROR);
+            logger(LOG_ERROR, "Error to open default device");
             exit(1);
         }
         ALCcontext* context = alcCreateContext(device, nullptr);
         if (!context)
         {
-            logger("Error to create OpenAL Context", LOG_ERROR);
+            logger(LOG_ERROR, "Error to create OpenAL Context");
             exit(1);
         }
         alcMakeContextCurrent(context);
@@ -46,11 +46,11 @@ namespace AudioEngine
     {
         ALenum error, state;
         if ((error = alGetError()) != AL_NO_ERROR)
-            logger(getErrorByOpenAL(error), LOG_ERROR);
+            logger(LOG_ERROR, getErrorByOpenAL(error));
 
         isPlayingAudio = false;
 
-        for(auto stream : this->streams)
+        for(const auto stream : this->streams)
         {
             alGetSourcei(*stream, AL_SOURCE_STATE, &state);
             if (state == AL_PLAYING) 
@@ -77,7 +77,7 @@ namespace AudioEngine
     void AudioPlayer::playStream(unsigned int* audioStream)
     {
         if (std::find(streams.begin(), streams.end(), audioStream) != streams.end())
-            logger("Stream already added", LOG_WARN);
+            logger(LOG_WARN, "Stream already added");
         else {
             this->streams.push_back(audioStream);
             alSourcePlay(*audioStream);
@@ -93,7 +93,7 @@ namespace AudioEngine
         if (std::find(streams.begin(), streams.end(), audioStream) != streams.end())
             alSourcePause(*audioStream);
         else
-            logger("Stream not added", LOG_ERROR);
+            logger(LOG_WARN, "Stream not added");
     }
 
     /**
@@ -105,7 +105,7 @@ namespace AudioEngine
         if (std::find(streams.begin(), streams.end(), audioStream) != streams.end())
             alSourceStop(*audioStream);
         else
-            logger("Stream not added", LOG_ERROR);
+            logger(LOG_WARN, "Stream not added");
     }
 
     /**

@@ -2,6 +2,7 @@
 #include <AudioEngine/tools.hpp>
 #include <AL/al.h>
 #include <AL/alc.h>
+#include <AL/alext.h>
 #include <algorithm>
 extern "C"
 {
@@ -118,5 +119,10 @@ namespace AudioEngine
         {
             alSourcef(*stream, AL_GAIN, (float)volume / 100.0f);
         }
+    }
+
+    void AudioPlayer::setDistanceModel(const DistanceModels model)
+    {
+        alDistanceModel(model);
     }
 }

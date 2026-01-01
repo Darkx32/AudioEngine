@@ -13,11 +13,10 @@ int main(int argc, char** argv)
     AudioEngine::AudioStream audioStream(argv[1]);
     
     player.playStream(audioStream.getStream());
+    audioStream.enableLoop(true);
     
-    while(true)
+    while(player.isRunningAudio())
     {
-        if (!player.isRunningAudio())
-            player.playStream(audioStream.getStream());
         player.updateSwaps();
     }
 

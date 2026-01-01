@@ -244,9 +244,6 @@ namespace AudioEngine
 
     /**
      * Generate the buffer data
-     * @param buffer OpenAL Buffer (is NULL)
-     * @param audioBuffer audioBuffer
-     * @param format audio format
      */
     void AudioBuffer::genBufferData()
     {

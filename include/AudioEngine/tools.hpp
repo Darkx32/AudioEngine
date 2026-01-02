@@ -2,9 +2,12 @@
 
 namespace AudioEngine
 {
-    static void RELEASE(const void* pointer) {
-        if (pointer)
+    template <typename T>
+    static void RELEASE(T*& pointer) {
+        if (pointer) {
             delete pointer;
+            pointer = nullptr;
+        }
     }
 
     enum LOG_TYPE{

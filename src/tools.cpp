@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdarg>
-#include <string>
 #include <AL/al.h>
 
 static int log_level_g = 3;
@@ -52,7 +51,7 @@ namespace AudioEngine
         va_start(args, msg);
 
         char buffer[1024];
-        int _ = vsnprintf_s(buffer, sizeof(buffer), msg, args);
+        int _ = vsnprintf(buffer, sizeof(buffer), msg, args);
 
         if (log_level_g < logLevel)
             return;

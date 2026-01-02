@@ -3,6 +3,8 @@
 /AudioEngine.dir/*
 CMakeFiles
 /Debug/*
+/.cache/
+/build/
 /output/*
 /x64/*
 out/

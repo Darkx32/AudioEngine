@@ -2,7 +2,12 @@
 
 namespace AudioEngine
 {
-    template <typename T>
+	/**
+	 * Safe release pointer
+	 * @tparam T
+	 * @param pointer Any pointer
+	 */
+	template <typename T>
     static void RELEASE(T*& pointer) {
         if (pointer) {
             delete pointer;

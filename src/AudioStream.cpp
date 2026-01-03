@@ -11,10 +11,6 @@
 
 namespace AudioEngine
 {
-    /**
-     * Create a new AudioStream
-     * @param filepath Path to find audio file
-     */
     AudioStream::AudioStream(const char* filepath)
     {
         mStream = -1;
@@ -52,10 +48,6 @@ namespace AudioEngine
         RELEASE(mAudioEffects);
     }
 
-    /**
-     * Get the stream
-     * @return Stream
-     */
     unsigned int* AudioStream::getStream()
     {
         return &mStream;

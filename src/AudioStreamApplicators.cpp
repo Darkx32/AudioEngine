@@ -3,19 +3,11 @@
 
 namespace AudioEngine
 {
-    /**
-     * Set the volume of the stream
-     * @param newVolume New volume
-     */
     void AudioStream::setVolume(const int newVolume) const
     {
         alSourcef(mStream, AL_GAIN, static_cast<ALfloat>(newVolume) / 100.f);
     }
 
-    /**
-     * Get the volume from stream
-     * @return Value of volume
-     */
     int AudioStream::getVolume() const
     {
         float actualVolume = 0;
@@ -47,21 +39,11 @@ namespace AudioEngine
         return static_cast<bool>(isLoop);
     }
 
-    /**
-     * Set the position of the stream
-     * @param x X position
-     * @param y Y position
-     * @param z Z position
-     */
     void AudioStream::setPosition(const float x, const float y, const float z) const
     {
         alSource3f(mStream, AL_POSITION, x, y, z);
     }
 
-    /**
-     * Get the position from stream
-     * @return Return array with the coords [x, y, z]
-     */
     float* AudioStream::getPosition() const
     {
         float x, y, z;

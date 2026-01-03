@@ -22,30 +22,16 @@ namespace AudioEngine
         }
     }
 
-    /**
-     * Set the log level
-     * @param newLogLevel New log level
-     */
     void setLogLevel(const int newLogLevel)
     {
         log_level_g = newLogLevel;
     }
 
-    /**
-     * Get the log level
-     * @return Log level
-     */
     int getLogLevel()
     {
         return log_level_g;
     }
 
-    /**
-     * Log a message
-     * @param logLevel Level for log
-     * @param msg Message to be logged
-     * @param ... Parameters
-     */
     void logger(const int logLevel, const char* msg, ...)
     {
         va_list args;
@@ -78,11 +64,6 @@ namespace AudioEngine
         va_end(args);
     }
 
-    /**
-     * Get the error by OpenAL
-     * @param error Error code from OpenAL
-     * @return decode error from code by OpenAL
-     */
     const char* getErrorByOpenAL(const int error)
     {
         switch (error)

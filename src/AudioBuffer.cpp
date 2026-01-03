@@ -12,10 +12,6 @@ extern "C"
 
 namespace AudioEngine
 {
-    /**
-     * Create a Audio Buffer
-     * @param file path to audio file
-     */
     AudioBuffer::AudioBuffer(const std::string& file) : mNumChannels(0), mSampleRate(0), mBitsPerSample(0), mAudioStreamIndex(0), mFormat(0), mBuffer(0)
     {
         const std::string msg = "Loading file " + file;
@@ -100,37 +96,21 @@ namespace AudioEngine
         mData.clear();
     }
 
-    /**
-     * Get number of channels
-     * @return Number of channels
-     */
     int AudioBuffer::getNumChannels() const
     {
         return mNumChannels;
     }
 
-    /**
-     * Get sample rate from audio file
-     * @return Sample rate
-     */
     int AudioBuffer::getSampleRate() const
     {
         return mSampleRate;
     }
 
-    /**
-     * Get bits per sample from audio file
-     * @return Bits per sample
-     */
     short AudioBuffer::getBitsPerSample() const
     {
         return mBitsPerSample;
     }
 
-    /**
-     * Get audio data in vector that contains bytes
-     * @return Vector with bytes
-     */
     std::vector<uint8_t> AudioBuffer::getBufferData()
     {
         return mData;
@@ -140,12 +120,6 @@ namespace AudioEngine
         return mBuffer;
     }
 
-    /**
-     * Get audio file details and save it in variables on class
-     * @param fc AVFormatContext
-     * @param cc AVCodecContext
-     * @param cp AVCodecParameters
-     */
     void AudioBuffer::getDetailsFromAudio(void* fc, void* cc, void* cp)
     {
         AVFormatContext* formatContext = static_cast<AVFormatContext*>(fc);
@@ -187,11 +161,6 @@ namespace AudioEngine
         av_frame_free(&frame);
     }
 
-    /**
-     * Generate audio buffer to play
-     * @param fc AVFormatContext
-     * @param cc AVCodecContext
-     */
     void AudioBuffer::generateBufferData(void* fc, void* cc)
     {
         AVFormatContext* formatContext = static_cast<AVFormatContext*>(fc);
@@ -242,9 +211,6 @@ namespace AudioEngine
         swr_free(&swrContext);
     }
 
-    /**
-     * Generate the buffer data
-     */
     void AudioBuffer::genBufferData()
     {
         ALuint error;

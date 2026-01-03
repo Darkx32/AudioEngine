@@ -16,15 +16,55 @@ namespace AudioEngine
     class AudioPlayer
     {
     public:
+        /**
+	     * Create a new AudioPlayer
+	     */
         AudioPlayer();
+
+        /**
+         * Cleanup AudioPlayer
+         */
         ~AudioPlayer();
 
+        /**
+	     * Update swaps of the player
+	     */
         void updateSwaps();
+
+        /**
+	     * Check if audio is running
+	     * @return True if audio is running
+	     */
         bool isRunningAudio() const;
+
+        /**
+	     * Play a stream and save it to internal controller
+	     * @param audioStream Stream to be played
+	     */
         void playStream(unsigned int* audioStream);
+
+        /**
+	     * Pause a stream
+	     * @param audioStream Stream to be paused
+	     */
         void pauseStream(const unsigned int* audioStream);
+
+        /**
+	     * Stop a stream
+	     * @param audioStream Stream to be stopped
+	     */
         void stopStream(const unsigned int* audioStream);
+
+        /**
+	     * Set volume of every streams in player
+	     * @param volume Volume to be set 0%-100%
+	     */
         void setGeneralVolume(unsigned int volume) const;
+
+        /**
+         * Set distance model to address the sound distancing system
+         * @param model 
+         */
         static void setDistanceModel(DistanceModels model);
 
     private:

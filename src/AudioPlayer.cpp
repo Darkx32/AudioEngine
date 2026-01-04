@@ -5,6 +5,7 @@
 #include <algorithm>
 extern "C"
 {
+    #define __STDC_CONSTANT_MACROS
     #include <libavfilter/avfilter.h>
 }
 
